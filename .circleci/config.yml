@@ -34,15 +34,38 @@ jobs:
       - run: npm ci
       - nx/set-shas
       - run: npx nx test frontend
-      - run:  npx nx serve frontend
+#      - run: npx nx serve frontend
+  lint-backend:
+    executor: docker-exe 
+    steps:
+      - checkout
+      - run: npm ci
+      - nx/set-shas
+      - run: npx nx lint backend 
+  test-build-backend:
+    executor: docker-exe
+    steps:
+      - checkout
+      - run: npm ci
+      - nx/set-shas
+      - run: npx nx test backend
+#      - run: npx nx serve backend
+
+
+
 
 workflows:
   frontend:
     jobs:
       - lint-frontend
+      - lint-backend
       - test-build-frontend:
           requires:
             - lint-frontend
+      - test-build-backend:
+          requires:
+            - lint-backend
+      
 
 
 
