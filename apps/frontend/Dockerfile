@@ -11,4 +11,4 @@ FROM nginx:1.22.1
 WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/builder/dist/apps/frontend ./
-COPY --from=builder /app/builder/apps/frontend/nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/builder/apps/frontend/default.conf /etc/nginx/conf.d/default.conf  
