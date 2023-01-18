@@ -22,3 +22,4 @@ stopC:
 .PHONY: deleteI
 deleteI:
 	docker rmi -f $(docker images -aq)
+####

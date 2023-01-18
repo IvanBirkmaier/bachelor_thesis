@@ -1,32 +1,112 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
-# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+# NOTE: Environment variables containing the necessary secrets can be setup in the CircleCI UI
+# See here https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
   node: circleci/node@4.1
-  # The heroku orb contains a set of prepackaged CircleCI configuration you can utilize to deploy applications to heroku
-  # Orbs reduce the amount of configuration required for common tasks.
-  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/heroku
-  # NOTE: Environment variables containing the necessary secrets can be setup in the CircleCI UI
-  # See here https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project
+#https://circleci.com/developer/orbs/orb/circleci/heroku
   heroku: circleci/heroku@1.2
+#https://circleci.com/developer/orbs/orb/nrwl/nx#commands-set-shas
+  nx: nrwl/nx@1.6.1
+#https://circleci.com/developer/orbs/orb/circleci/docker
+  docker: circleci/docker@2.2.0 
+#https://circleci.com/docs/executor-intro/?utm_source=google&utm_medium=sem&utm_campaign=sem-google-dg--emea-en-dsa-maxConv-auth-nb&utm_term=g_-_c__dsa_&utm_content=&gclid=CjwKCAiAzp6eBhByEiwA_gGq5Er6dJtC6aT0StgG9BSK02B6lrmrkcenw_pmb-akGu-i4rZveek8zBoCV9QQAvD_BwE
+
+
+executors:
+  docker-exe:
+    docker:
+      - image: circleci/node:12.22.7-bullseye-browsers-legacy
+
+jobs:
+  lint-frontend:
+    executor: docker-exe 
+      steps:
+        - npx nx lint frontend 
+  test-build-frontend:
+    executor: docker-exe
+      steps:
+        - npx nx test frontend
+        - npx nx serve frontend
 
 workflows:
-  # Below is the definition of your workflow.
-  # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
-  # CircleCI will run this workflow on every commit.
-  # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
-  sample:
+  frontend:
     jobs:
-      - node/test
-      - heroku/deploy-via-git:
-          force: true # this parameter instructs the push to use a force flag when pushing to the heroku remote, see: https://devcenter.heroku.com/articles/git
+      - lint-frontend
+      - test-build-frontend:
           requires:
-            - node/test # only run deploy-via-git job if the build job has completed
-          filters:
-            branches:
-              # This sample config runs this job on any branch matching the regex below, however, it's more likely you want to only run this job on master.
-              only: /.*-heroku-deploy/ # Delete this line
-              # only: master  # Uncomment this line
+            - lint-frondend
+
+
+
+#   # Below is the definition of your workflow.
+#   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
+#   # CircleCI will run this workflow on every commit.
+#   # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
+#   sample:
+#     jobs:
+#       - node/test
+#       - heroku/deploy-via-git:
+#           force: true # this parameter instructs the push to use a force flag when pushing to the heroku remote, see: https://devcenter.heroku.com/articles/git
+#           requires:
+#             - node/test # only run deploy-via-git job if the build job has completed
+#           filters:
+#             branches:
+#               # This sample config runs this job on any branch matching the regex below, however, it's more likely you want to only run this job on master.
+#               only: /.*-heroku-deploy/ # Delete this line
+#               # only: master  # Uncomment this line
+
+
+
+
+
+
+
+
+
+
+
+# commands:
+# #Definiert Commands die immer wieder verwendet werden können
+# # BSP: build:
+#         steps: #(Kollection an ausführbaren Befehlen)
+#           # - run: npx nx serve frontend
+# executors:
+# #Legt die Build-Enviroment fest (Docker, VM)
+# # BSP: docker-exe:
+#         # docker:
+#             #image: circleci/node:9.0.9
+# jobs:
+# #Definieren einzelne schritte, die bestimmte commands beinhalten 
+# #  BSP: build-frontend-with-docker:
+#               # executor: docker-exe (wie oben definiert)
+#               steps:
+#                 #-build (wie oben definiert)
+# #braucht immer einen executer
+# workflows:
+# # Managed die einzelnen Jobs
+# # BSP: Workflow1:
+# #         jobs: 
+#             #-build-frontend-with-docker (wie oben definiert)
+#             #-build2
+#                 #requires:
+#                   #build-frontend-with-docker (build 2 kann erst starten wenn build-frontend-with-docker fertig ist)
+
+# #Docker Layer Chaching
+
+# #parallelism key auf Job ebene um bsp. mehrere Test parallel ausführen zu können in einem Job indem es sie auf verschiedene exicuters, 
+# #vom im job definierten executer verteilt
+
+# # - checkout Command fetch den Code aus dem Repository
+
+# #Beispiel wie man in einen Workflow manuelle zwischenschritte einbaut
+#       # - Hold-for-Approval:
+#       #     type: approval
+#       #     requires:
+#       #       - Using-Node
+#       #       - Fetch-Code
+#       # - Now-Complete:
+#       #     requires:
+#       #       - Hold-for-Approval
