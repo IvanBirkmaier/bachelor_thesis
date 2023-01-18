@@ -31,7 +31,7 @@ jobs:
   test-build-frontend:
     executor: docker-exe
     steps:
-      -checkout
+      - checkout
       - run: npm ci
       - nx/set-shas
       - run: npx nx test frontend
