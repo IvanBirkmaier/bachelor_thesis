@@ -32,10 +32,10 @@ jobs:
     executor: docker-exe
     steps:
       -checkout
-      -run: npm ci
-      -nx/set-shas
-      run: - npx nx test frontend
-      run: - npx nx serve frontend
+      - run: npm ci
+      - nx/set-shas
+      - run: - npx nx test frontend
+      - run: - npx nx serve frontend
 
 workflows:
   frontend:
