@@ -18,8 +18,7 @@ orbs:
 executors:
   docker-exe:
     docker:
-      - image: circleci/node:12.22.7-bullseye-browsers-legacy
-
+      - image: circleci/node:19.3.0
 jobs:
   lint-frontend:
     executor: docker-exe 
