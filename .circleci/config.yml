@@ -23,13 +23,13 @@ executors:
 jobs:
   lint-frontend:
     executor: docker-exe 
-      steps:
-        - npx nx lint frontend 
+    steps:
+      - npx nx lint frontend 
   test-build-frontend:
     executor: docker-exe
-      steps:
-        - npx nx test frontend
-        - npx nx serve frontend
+    steps:
+      - npx nx test frontend
+      - npx nx serve frontend
 
 workflows:
   frontend:
