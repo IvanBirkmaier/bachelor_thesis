@@ -14,8 +14,8 @@ describe('AppService', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to my-nest-app!"', () => {
-      expect(service.getData()).toEqual({ message: 'Welcome to my-nest-app!' });
+    it('should return "Welcome to backend!"', () => {
+      expect(service.getData()).toEqual({ message: 'Welcome to backend!' });
     });
   });
 });
