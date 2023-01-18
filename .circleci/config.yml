@@ -43,7 +43,7 @@ workflows:
       - lint-frontend
       - test-build-frontend:
           requires:
-            - lint-frondend
+            - lint-frontend
 
 
 
