@@ -9,7 +9,7 @@ orbs:
 #https://circleci.com/developer/orbs/orb/circleci/heroku
   heroku: circleci/heroku@1.2
 #https://circleci.com/developer/orbs/orb/nrwl/nx#commands-set-shas
-  #nx: nrwl/nx@1.6.1
+  nx: nrwl/nx@1.6.1
 #https://circleci.com/developer/orbs/orb/circleci/docker
   docker: circleci/docker@2.2.0 
 #https://circleci.com/docs/executor-intro/?utm_source=google&utm_medium=sem&utm_campaign=sem-google-dg--emea-en-dsa-maxConv-auth-nb&utm_term=g_-_c__dsa_&utm_content=&gclid=CjwKCAiAzp6eBhByEiwA_gGq5Er6dJtC6aT0StgG9BSK02B6lrmrkcenw_pmb-akGu-i4rZveek8zBoCV9QQAvD_BwE
