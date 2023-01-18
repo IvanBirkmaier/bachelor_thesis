@@ -11,7 +11,7 @@ backend:
 #Deletes all existend Docker-Container
 .PHONY: deleteC
 deleteC:
-	 docker rm -vf $(docker ps -aq)
+	docker rm -vf $(docker ps -aq)
 
 #Stops all running Docker-Container
 .PHONY: stopC
