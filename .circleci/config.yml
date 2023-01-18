@@ -24,12 +24,18 @@ jobs:
   lint-frontend:
     executor: docker-exe 
     steps:
-      - npx nx lint frontend 
+      -checkout
+      -run: npm ci
+      -nx/set-shas
+      run: - npx nx lint frontend 
   test-build-frontend:
     executor: docker-exe
     steps:
-      - npx nx test frontend
-      - npx nx serve frontend
+      -checkout
+      -run: npm ci
+      -nx/set-shas
+      run: - npx nx test frontend
+      run: - npx nx serve frontend
 
 workflows:
   frontend:
