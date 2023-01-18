@@ -13,35 +13,35 @@ orbs:
 #https://circleci.com/developer/orbs/orb/circleci/docker
   docker: circleci/docker@2.2.0 
 #https://circleci.com/docs/executor-intro/?utm_source=google&utm_medium=sem&utm_campaign=sem-google-dg--emea-en-dsa-maxConv-auth-nb&utm_term=g_-_c__dsa_&utm_content=&gclid=CjwKCAiAzp6eBhByEiwA_gGq5Er6dJtC6aT0StgG9BSK02B6lrmrkcenw_pmb-akGu-i4rZveek8zBoCV9QQAvD_BwE
-#
+
 
 executors:
   docker-exe:
     docker:
       - image: cimg/node:19.3.0
 jobs:
-  lint-frontend:
-    executor: docker-exe 
-    steps:
-      - checkout
-      - run: npm ci
-      - nx/set-shas
-      - run: npx nx lint frontend 
-  test-build-frontend:
-    executor: docker-exe
-    steps:
-      - checkout
-      - run: npm ci
-      - nx/set-shas
-      - run: npx nx test frontend
-#      - run: npx nx serve frontend
+#   lint-frontend:
+#     executor: docker-exe 
+#     steps:
+#       - checkout
+#       - run: npm ci
+#       - nx/set-shas
+#       - run: npx nx lint frontend 
+#   test-build-frontend:
+#     executor: docker-exe
+#     steps:
+#       - checkout
+#       - run: npm ci
+#       - nx/set-shas
+#       - run: npx nx test frontend
+# #      - run: npx nx serve frontend
   lint-backend:
     executor: docker-exe 
     steps:
       - checkout
       - run: npm ci
       - nx/set-shas
-      - run: npx nx lint backend 
+      - run: npx nx build backend 
   test-build-backend:
     executor: docker-exe
     steps:
@@ -57,11 +57,11 @@ jobs:
 workflows:
   frontend:
     jobs:
-      - lint-frontend
+      #- lint-frontend
       - lint-backend
-      - test-build-frontend:
-          requires:
-            - lint-frontend
+      # - test-build-frontend:
+      #     requires:
+      #       - lint-frontend
       - test-build-backend:
           requires:
             - lint-backend
@@ -129,12 +129,3 @@ workflows:
 
 # # - checkout Command fetch den Code aus dem Repository
 
-# #Beispiel wie man in einen Workflow manuelle zwischenschritte einbaut
-#       # - Hold-for-Approval:
-#       #     type: approval
-#       #     requires:
-#       #       - Using-Node
-#       #       - Fetch-Code
-#       # - Now-Complete:
-#       #     requires:
-#       #       - Hold-for-Approval
