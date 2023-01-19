@@ -58,7 +58,7 @@ jobs:
             docker push ivanbirkamier/nxbasimages:"$CIRCLE_BUILD_NUM"
   nx_build_nestjsbackend:
     executor: docker-exe
-    working_directory: ~/project/apps/backend/Dockerfile
+    working_directory: ~\project\apps\backend\Dockerfile
     steps:
       - checkout
       - setup_remote_docker
