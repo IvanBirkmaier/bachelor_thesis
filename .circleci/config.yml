@@ -44,17 +44,17 @@ jobs:
           name: Build Base Image, tagged with CircleCI Build Number
           command: |
             docker build -t ivanbirkameir/nxbasimages:latest .
-      - run:
-          name: Tag Base Image with CircleCI Build Number
-          command: |
-            export TAG=`echo ${CIRCLE_BUILD_NUM}`
-            docker tag nxbasimages:latest nxbasimages:$TAG
+      # - run:
+      #     name: Tag Base Image with CircleCI Build Number
+      #     command: |
+      #       export TAG=`echo ${CIRCLE_BUILD_NUM}`
+      #       docker tag nxbasimages:latest nxbasimages:$TAG
       - run:
           name: Push Base Image to Docker Hub
           command: |
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             #docker push ivanbirkamier/nxbasimages:latest
-            docker push ivanbirkamier/nxbasimages:$TAG
+            docker push ivanbirkamier/nxbasimages:latest
 workflows:
   affected-services:
     jobs:
