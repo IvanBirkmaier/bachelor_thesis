@@ -8,7 +8,6 @@ RUN npx nx build frontend ${BUILD_FLAG}
 
 FROM nginx:1.22.1
 
-WORKDIR /usr/share/nginx/html
+COPY --from=builder /app/builder/apps/frontend/nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/builder/dist/apps/frontend /usr/share/nginx/html
 
-COPY --from=builder /app/builder/dist/frontend ./
-COPY --from=builder /app/builder/frontend/nginx.conf /etc/nginx/nginx.conf
