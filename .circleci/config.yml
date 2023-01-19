@@ -50,7 +50,7 @@ jobs:
       #     name: Tag Base Image with CircleCI Build Number
       #     command: |
       #       export TAG=`echo ${CIRCLE_BUILD_NUM}`
-      #       docker tag nxbaseimage:latest nxbaseimage:$TAG
+      ##       docker tag nxbaseimage:latest nxbaseimage:$TAG
       - run:
           name: Push Base Image to Docker Hub
           command: |
