@@ -60,7 +60,8 @@ jobs:
     executor: docker-exe
     working_directory: ~/project/apps/backend/
     steps:
-      - checkout
+      - checkout:
+          path: ~/backend
       - setup_remote_docker
       - run:
           name: Build Nx NestJS Image, tagged with CircleCI Build Number
