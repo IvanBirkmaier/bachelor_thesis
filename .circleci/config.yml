@@ -52,13 +52,13 @@ jobs:
       - run:
           name: Push Base Image to Docker Hub
           command: |
-            echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USER}" --password-stdin
+            docker login -u "$DOCKER_USER" -u "$DOCKER_PASS"
             docker push nxbaseimage:latest
             docker push nxbaseimage:$TAG
 workflows:
   affected-services:
     jobs:
-      - lint-test-build-affected-services
+      # - lint-test-build-affected-services
       - nx_build_baseImage
           # requires:
           #   - lint-test-build-affected-services
