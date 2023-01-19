@@ -45,13 +45,13 @@ jobs:
           command: |
             # export TAG=`echo ${CIRCLE_BUILD_NUM}`
             # docker build -t ivanbirkameir/nxbaseimage:$TAG .
-            docker build -t ivanbirkameir/nxbaseimage:${CIRCLE_BUILD_NUM} .
+              docker build -t ivanbirkameir/nxbaseimage:${CIRCLE_BUILD_NUM} .
       - run:
           name: Push Base Image to Docker Hub
           command: |
-            docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+              docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
            # docker push ivanbirkamier/nxbasimages:latest
-            docker push ivanbirkamier/nxbasimages:${CIRCLE_BUILD_NUM}
+              docker push ivanbirkamier/nxbasimages:${CIRCLE_BUILD_NUM}
 workflows:
   affected-services:
     jobs:
