@@ -23,24 +23,53 @@ executors:
     docker:
       - image: docker:17.05.0-ce-git
 jobs:
-
   lint-test-build-affected-services:
     executor: node-exe 
     steps:
       - checkout
       - run: npm ci
       - nx/set-shas
-      ## - run: npx nx workspace-lint
+      # - run: npx nx workspace-lint
       # - run: npx nx format:check
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint --parallel=3
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3 --ci --code-coverage
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=build --parallel=3
-
-
+  nx_build_baseImage:
+    working_directory: ~/project
+    steps:
+      - run:
+          name: Build Base Image
+          command: |
+            docker build -t nxbaseImage .
+      - run:
+          name: Tag Base Image with CircleCI Build Number
+          command: |
+            export TAG=`echo ${CIRCLE_BUILD_NUM}`
+            docker tag nxbaseImage:latest nxbaseImage:$TAG
+      - run:
+          name: Push Base Image to Docker Hub
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+            docker push nxbaseImage:latest
+            docker push nxbaseImage:$TAG
 workflows:
   affected-services:
     jobs:
       - lint-test-build-affected-services
+      - nx_build_baseImage:
+        requires:
+          - lint-test-build-affected-services
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -76,6 +105,10 @@ workflows:
   #     - nx/set-shas
   #     - run: npx nx test backend
   #     - run: npx nx build backend
+
+
+
+
 
 ######################################################### Workflow unaffected
 # workflows:
