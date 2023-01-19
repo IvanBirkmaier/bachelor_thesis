@@ -14,7 +14,7 @@ orbs:
   docker: circleci/docker@2.2.0 
 #https://circleci.com/docs/executor-intro/?utm_source=google&utm_medium=sem&utm_campaign=sem-google-dg--emea-en-dsa-maxConv-auth-nb&utm_term=g_-_c__dsa_&utm_content=&gclid=CjwKCAiAzp6eBhByEiwA_gGq5Er6dJtC6aT0StgG9BSK02B6lrmrkcenw_pmb-akGu-i4rZveek8zBoCV9QQAvD_BwE
 
-Apikey cc348617-caa7-4d7b-9024-fe9e6e4ff428
+
 executors:
   node-exe:
     docker:
