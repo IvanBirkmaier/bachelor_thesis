@@ -38,6 +38,7 @@ jobs:
     executor: node-exe 
     working_directory: ~/project
     steps:
+      - checkout
       - run:
           name: Build Base Image
           command: |
