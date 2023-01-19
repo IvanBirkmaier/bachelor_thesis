@@ -1,4 +1,4 @@
-FROM my-base-image:nx-base AS builder
+FROM ivanbirkamier/nxbasimages:latest AS builder
 
 ARG NODE_ENV
 ARG BUILD_FLAG
@@ -6,7 +6,7 @@ WORKDIR /app/builder
 COPY . .
 RUN npx nx build backend ${BUILD_FLAG}
 
-FROM my-base-image:nx-base
+FROM ivanbirkamier/nxbasimages:latest
 
 WORKDIR /app
 COPY --from=builder /app/builder ./

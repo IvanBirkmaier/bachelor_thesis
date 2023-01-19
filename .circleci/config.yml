@@ -56,13 +56,34 @@ jobs:
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             #docker push ivanbirkamier/nxbasimages:latest
             docker push ivanbirkamier/nxbasimages:"$CIRCLE_BUILD_NUM"
+  nx_build_nestjsbackend:
+    executor: docker-exe
+    working_directory: ~/project/apps/backend
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Nx NestJS Image, tagged with CircleCI Build Number
+          command: |
+            #export TAG=`echo ${CIRCLE_BUILD_NUM}`
+            docker build -t ivanbirkamier/nxnestjsbackend:"$CIRCLE_BUILD_NUM" .
+      - run:
+          name: Push Base Image to Docker Hub
+          command: |
+            docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+            #docker push ivanbirkamier/nxnestjsbackend:latest
+            docker push ivanbirkamier/nxnestjsbackend:"$CIRCLE_BUILD_NUM"
+    
 workflows:
   affected-services:
     jobs:
-      # - lint-test-build-affected-services
-      - nx_build_baseImage
+      - lint-test-build-affected-services
+      #- nx_build_baseImage
           # requires:
           #   - lint-test-build-affected-services
+      - nx_build_nestjsbackend:
+          requires:
+            - lint-test-build-affected-services
 
   
 

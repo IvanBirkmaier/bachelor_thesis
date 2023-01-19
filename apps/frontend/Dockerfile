@@ -1,4 +1,4 @@
-FROM my-base-image:nx-base AS builder
+FROM ivanbirkamier/nxbasimages:latest AS builder
 
 ARG NODE_ENV
 ARG BUILD_FLAG
@@ -11,4 +11,4 @@ FROM nginx:1.22.1
 WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/builder/dist/apps/frontend ./
-COPY --from=builder /app/builder/apps/frontend/default.conf /etc/nginx/conf.d/default.conf  
+COPY --from=builder /app/builder/apps/frontend/nginx.conf /etc/nginx/nginx.conf
