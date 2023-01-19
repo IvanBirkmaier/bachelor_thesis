@@ -19,7 +19,7 @@ executors:
   node-exe:
     docker:
       - image: cimg/node:19.3.0
-   docker-exe:
+  docker-exe:
     docker:
       - image: docker:17.05.0-ce-git
 jobs:
