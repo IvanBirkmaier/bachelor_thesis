@@ -53,8 +53,8 @@ jobs:
           name: Push Base Image to Docker Hub
           command: |
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-            docker push nxbaseimage:latest
-            docker push nxbaseimage:$TAG
+            docker push ivanbirkamier/nxbasimages:latest
+            docker push ivanbirkamier/nxbasimages:$TAG
 workflows:
   affected-services:
     jobs:
