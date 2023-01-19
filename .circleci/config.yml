@@ -58,7 +58,7 @@ jobs:
             docker push ivanbirkamier/nxbasimages:"$CIRCLE_BUILD_NUM"
   nx_build_nestjsbackend:
     executor: docker-exe
-    working_directory: ~/project/apps/backend
+    working_directory: $CIRCLE_WORKING_DIRECTORY/apps/backend
     steps:
       - checkout
       - setup_remote_docker
@@ -77,13 +77,13 @@ jobs:
 workflows:
   affected-services:
     jobs:
-      - lint-test-build-affected-services
+      #- lint-test-build-affected-services
       #- nx_build_baseImage
           # requires:
           #   - lint-test-build-affected-services
-      - nx_build_nestjsbackend:
-          requires:
-            - lint-test-build-affected-services
+      - nx_build_nestjsbackend
+          #requires:
+            #- lint-test-build-affected-services
 
   
 
