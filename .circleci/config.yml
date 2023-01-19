@@ -58,13 +58,14 @@ jobs:
             docker push ivanbirkamier/nxbasimages:"$CIRCLE_BUILD_NUM"
   nx_build_nestjsbackend:
     executor: docker-exe
-    working_directory: ~/project/apps/backend
+    working_directory: ~/project
     steps:
       - checkout
       - setup_remote_docker
       - run:
           name: Build Nx NestJS Image, tagged with CircleCI Build Number
           command: |
+            cd apps/backend
             #export TAG=`echo ${CIRCLE_BUILD_NUM}`
             docker build -t ivanbirkamier/nxnestjsbackend:"$CIRCLE_BUILD_NUM" .
       - run:
