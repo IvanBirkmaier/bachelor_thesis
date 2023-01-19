@@ -14,58 +14,116 @@ orbs:
   docker: circleci/docker@2.2.0 
 #https://circleci.com/docs/executor-intro/?utm_source=google&utm_medium=sem&utm_campaign=sem-google-dg--emea-en-dsa-maxConv-auth-nb&utm_term=g_-_c__dsa_&utm_content=&gclid=CjwKCAiAzp6eBhByEiwA_gGq5Er6dJtC6aT0StgG9BSK02B6lrmrkcenw_pmb-akGu-i4rZveek8zBoCV9QQAvD_BwE
 
-
+Apikey cc348617-caa7-4d7b-9024-fe9e6e4ff428
 executors:
-  docker-exe:
+  node-exe:
     docker:
       - image: cimg/node:19.3.0
+   docker-exe:
+    docker:
+      - image: docker:17.05.0-ce-git
 jobs:
-#   lint-frontend:
-#     executor: docker-exe 
-#     steps:
-#       - checkout
-#       - run: npm ci
-#       - nx/set-shas
-#       - run: npx nx lint frontend 
-#   test-build-frontend:
-#     executor: docker-exe
-#     steps:
-#       - checkout
-#       - run: npm ci
-#       - nx/set-shas
-#       - run: npx nx test frontend
-# #      - run: npx nx serve frontend
-  lint-backend:
-    executor: docker-exe 
+
+  lint-test-build-affected-services:
     steps:
       - checkout
       - run: npm ci
       - nx/set-shas
-      - run: npx nx build backend 
-  test-build-backend:
-    executor: docker-exe
-    steps:
-      - checkout
-      - run: npm ci
-      - nx/set-shas
-      - run: npx nx test backend
-#      - run: npx nx serve backend
+      - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint --parallel=3
+      - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3 --ci --code-coverage
+      - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=build --parallel=3
 
 
+workflow:
+  affected-services:
+    - lint-test-build-affected-services
+  
+  
+  
+  ############################################ Jobs uneffected ######################
+  
+  # lint-frontend:
+  #   executor: node-exe 
+  #   steps:
+  #     - checkout
+  #     - run: npm ci
+  #     - nx/set-shas
+  #     - run: npx nx lint frontend 
+  # test-build-frontend:
+  #   executor: node-exe
+  #   steps:
+  #     - checkout
+  #     - run: npm ci
+  #     - nx/set-shas
+  #     - run: npx nx test frontend
+  #     - run: npx nx build frontend
+  # lint-backend:
+  #   executor: node-exe 
+  #   steps:
+  #     - checkout
+  #     - run: npm ci
+  #     - nx/set-shas
+  #     - run: npx nx lint backend 
+  # test-build-backend:
+  #   executor: node-exe
+  #   steps:
+  #     - checkout
+  #     - run: npm ci
+  #     - nx/set-shas
+  #     - run: npx nx test backend
+  #     - run: npx nx build backend
 
-
-workflows:
-  frontend:
-    jobs:
-      #- lint-frontend
-      - lint-backend
-      # - test-build-frontend:
-      #     requires:
-      #       - lint-frontend
-      - test-build-backend:
-          requires:
-            - lint-backend
+######################################################### Workflow unaffected
+# workflows:
+#   frontend:
+#     jobs:
+#       - lint-frontend
+#       - lint-backend
+#       - test-build-frontend:
+#           requires:
+#             - lint-frontend
+#       - test-build-backend:
+#           requires:
+#             - lint-backend
       
+
+
+####################################################### Container #########################################
+  # build-container:
+  #   executor: docker-exe
+  #   steps:
+  #     - checkout
+  #     - setup_remote_docker
+  #     - restore_cache:
+  #         keys:
+  #           - v1-{{ .develop }}
+  #         paths:
+  #           - /caches/app.tar
+  #     - run:
+  #         name: Load Docker image layer cache
+  #         command: |
+  #           set +o pipefail
+  #           docker load -i /caches/app.tar | true
+  #     - run:
+  #         name: Build application Docker image
+  #         command: |
+  #           docker build --cache-from=app -t app .
+  #     - run:
+  #         name: Save Docker image layer cache
+  #         command: |
+  #           mkdir -p /caches
+  #           docker save -o /caches/app.tar app
+  #     - save_cache:
+  #         key: v1-{{ .develop }}-{{ epoch }}
+  #         paths:
+  #           - /caches/app.tar
+  #     - run:
+  #         name: Run tests
+  #         command: |
+  #           docker-compose -f ./docker-compose.test.yml up
+
+
+
 
 
 
