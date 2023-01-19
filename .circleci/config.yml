@@ -45,11 +45,6 @@ jobs:
           command: |
             #export TAG=`echo ${CIRCLE_BUILD_NUM}`
             docker build -t ivanbirkamier/nxbasimages:"$CIRCLE_BUILD_NUM" .
-      # - run:
-      #     name: Tag Base Image with CircleCI Build Number
-      #     command: |
-      #       export TAG=`echo ${CIRCLE_BUILD_NUM}`
-      #       docker tag ivanbirkamier/nxbasimages:latest ivanbirkamier/nxbasimages:$TAG
       - run:
           name: Push Base Image to Docker Hub
           command: |
@@ -66,14 +61,31 @@ jobs:
           name: Build Nx NestJS Image, tagged with CircleCI Build Number
           command: |
             cd apps/backend
-            #export TAG=`echo ${CIRCLE_BUILD_NUM}`
             docker build -t ivanbirkamier/nxnestjsbackend:"$CIRCLE_BUILD_NUM" .
       - run:
-          name: Push Base Image to Docker Hub
+          name: Push NestJS Image to Docker Hub
           command: |
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             docker push ivanbirkamier/nxnestjsbackend:latest
             docker push ivanbirkamier/nxnestjsbackend:"$CIRCLE_BUILD_NUM"
+  nx_build_nxangularfrontend:
+    executor: docker-exe
+    working_directory: ~/project
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Nx Angular Image, tagged with CircleCI Build Number
+          command: |
+            cd apps/frontend
+            docker build -t ivanbirkamier/nxangularjsfrontend:"$CIRCLE_BUILD_NUM" .
+            docker tag ivanbirkamier/nxangularjsfrontend:"$CIRCLE_BUILD_NUM" ivanbirkamier/nxangularjsfrontend:latest
+      - run:
+          name: Push Angular Image to Docker Hub
+          command: |
+            docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+            docker push ivanbirkamier/nxangularjsfrontend:"$CIRCLE_BUILD_NUM"
+            docker push ivanbirkamier/nxangularjsfrontend:latest
     
 workflows:
   affected-services:
@@ -82,114 +94,14 @@ workflows:
       #- nx_build_baseImage
           # requires:
           #   - lint-test-build-affected-services
-      - nx_build_nestjsbackend
+      #- nx_build_nestjsbackend
           #requires:
-            #- lint-test-build-affected-services
+          #- lint-test-build-affected-services
+      - nx_build_nxangularfrontend
 
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  ############################################ Jobs uneffected ######################
-  
-  # lint-frontend:
-  #   executor: node-exe 
-  #   steps:
-  #     - checkout
-  #     - run: npm ci
-  #     - nx/set-shas
-  #     - run: npx nx lint frontend 
-  # test-build-frontend:
-  #   executor: node-exe
-  #   steps:
-  #     - checkout
-  #     - run: npm ci
-  #     - nx/set-shas
-  #     - run: npx nx test frontend
-  #     - run: npx nx build frontend
-  # lint-backend:
-  #   executor: node-exe 
-  #   steps:
-  #     - checkout
-  #     - run: npm ci
-  #     - nx/set-shas
-  #     - run: npx nx lint backend 
-  # test-build-backend:
-  #   executor: node-exe
-  #   steps:
-  #     - checkout
-  #     - run: npm ci
-  #     - nx/set-shas
-  #     - run: npx nx test backend
-  #     - run: npx nx build backend
-
-
-
-
-
-######################################################### Workflow unaffected
-# workflows:
-#   frontend:
-#     jobs:
-#       - lint-frontend
-#       - lint-backend
-#       - test-build-frontend:
-#           requires:
-#             - lint-frontend
-#       - test-build-backend:
-#           requires:
-#             - lint-backend
-      
-
-
-####################################################### Container #########################################
-  # build-container:
-  #   executor: docker-exe
-  #   steps:
-  #     - checkout
-  #     - setup_remote_docker
-  #     - restore_cache:
-  #         keys:
-  #           - v1-{{ .develop }}
-  #         paths:
-  #           - /caches/app.tar
-  #     - run:
-  #         name: Load Docker image layer cache
-  #         command: |
-  #           set +o pipefail
-  #           docker load -i /caches/app.tar | true
-  #     - run:
-  #         name: Build application Docker image
-  #         command: |
-  #           docker build --cache-from=app -t app .
-  #     - run:
-  #         name: Save Docker image layer cache
-  #         command: |
-  #           mkdir -p /caches
-  #           docker save -o /caches/app.tar app
-  #     - save_cache:
-  #         key: v1-{{ .develop }}-{{ epoch }}
-  #         paths:
-  #           - /caches/app.tar
-  #     - run:
-  #         name: Run tests
-  #         command: |
-  #           docker-compose -f ./docker-compose.test.yml up
-
-
-
-
-
-
+#####################################################################################################################################################
+################################################################ Notizen #############################################################################
+#####################################################################################################################################################
 #   # Below is the definition of your workflow.
 #   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
 #   # CircleCI will run this workflow on every commit.
@@ -206,13 +118,22 @@ workflows:
 #               # This sample config runs this job on any branch matching the regex below, however, it's more likely you want to only run this job on master.
 #               only: /.*-heroku-deploy/ # Delete this line
 #               # only: master  # Uncomment this line
-
-
-
-
-
-
-
+#####################################################################################################################################################
+###################################### BEISPIEL FÜR EINEN DOCKER COMPOSE-PUSH #######################################################################
+#####################################################################################################################################################
+# build_image1:
+#     working_directory: ~/project
+#     steps:
+#       - checkout
+#       - run:
+#           name: Build Image 1
+#           command: |
+#             docker-compose build
+#       - run:
+#           name: Push Images to Docker Hub
+#           command: |
+#             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#             docker-compose push
 
 
 
