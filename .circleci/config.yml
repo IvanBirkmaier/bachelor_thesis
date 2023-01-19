@@ -72,7 +72,7 @@ jobs:
           name: Push Base Image to Docker Hub
           command: |
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-            #docker push ivanbirkamier/nxnestjsbackend:latest
+            docker push ivanbirkamier/nxnestjsbackend:latest
             docker push ivanbirkamier/nxnestjsbackend:"$CIRCLE_BUILD_NUM"
     
 workflows:
