@@ -58,8 +58,8 @@ workflows:
     jobs:
       - lint-test-build-affected-services
       - nx_build_baseImage:
-        requires:
-          - lint-test-build-affected-services
+          requires:
+            - lint-test-build-affected-services
 
   
 
