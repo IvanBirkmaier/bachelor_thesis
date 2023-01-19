@@ -37,7 +37,8 @@ jobs:
 
 workflow:
   affected-services:
-    - lint-test-build-affected-services
+    jobs:
+      - lint-test-build-affected-services
   
   
   
