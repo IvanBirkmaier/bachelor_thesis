@@ -41,7 +41,7 @@ jobs:
       - run:
           name: Build Base Image
           command: |
-            docker build -t nxbaseImage .
+            docker build -t nxbaseImage:latest .
       - run:
           name: Tag Base Image with CircleCI Build Number
           command: |
