@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Push Base Image to Docker Hub
           command: |
-            docker login -u "${DOCKER_USER}" -p "${DOCKER_PASSWORD}"
+            echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USER}" --password-stdin
             docker push nxbaseimage:latest
             docker push nxbaseimage:$TAG
 workflows:
