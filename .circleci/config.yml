@@ -60,7 +60,7 @@ jobs:
     executor: docker-exe
     working_directory: ~/project
     steps:
-      - checkout
+      - checkout:
           path: /apps/backend/Dockerfile
       - setup_remote_docker
       - run:
