@@ -25,6 +25,7 @@ executors:
 jobs:
 
   lint-test-build-affected-services:
+    executor: node-exe 
     steps:
       - checkout
       - run: npm ci
