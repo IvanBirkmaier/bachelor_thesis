@@ -45,7 +45,6 @@ jobs:
           command: |
             # export TAG=`echo ${CIRCLE_BUILD_NUM}`
             # docker build -t ivanbirkameir/nxbaseimage:$TAG .
-           
             docker build -t ivanbirkameir/nxbaseimage:${CIRCLE_BUILD_NUM} .
       # - run:
       #     name: Tag Base Image with CircleCI Build Number
