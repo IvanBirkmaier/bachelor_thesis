@@ -52,7 +52,7 @@ jobs:
       #       export TAG=`echo ${CIRCLE_BUILD_NUM}`
       ##       docker tag nxbaseimage:latest nxbaseimage:$TAG
       - run:
-          name: Push Base Image to Docker Hub
+          #name: Push Base Image to Docker Hub
           command: |
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
            # docker push ivanbirkamier/nxbasimages:latest
