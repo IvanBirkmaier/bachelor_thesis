@@ -35,6 +35,7 @@ jobs:
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3 --ci --code-coverage
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=build --parallel=3
   nx_build_baseImage:
+    executor: node-exe 
     working_directory: ~/project
     steps:
       - run:
