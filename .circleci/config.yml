@@ -92,7 +92,7 @@ workflows:
   affected-services:
     jobs:
       #- lint-test-build-affected-services
-      #- nx_build_baseImage
+      - nx_build_baseImage
           # requires:
           #   - lint-test-build-affected-services
       #- nx_build_nestjsbackend
