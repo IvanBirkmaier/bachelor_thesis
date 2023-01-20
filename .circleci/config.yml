@@ -13,8 +13,6 @@ orbs:
 #https://circleci.com/developer/orbs/orb/circleci/docker
   docker: circleci/docker@2.2.0 
 #https://circleci.com/docs/executor-intro/?utm_source=google&utm_medium=sem&utm_campaign=sem-google-dg--emea-en-dsa-maxConv-auth-nb&utm_term=g_-_c__dsa_&utm_content=&gclid=CjwKCAiAzp6eBhByEiwA_gGq5Er6dJtC6aT0StgG9BSK02B6lrmrkcenw_pmb-akGu-i4rZveek8zBoCV9QQAvD_BwE
-
-
 executors:
   node-exe:
     docker:
@@ -106,7 +104,7 @@ workflows:
 
 
 ###################################################################################################################################################
-############################################################### Notizen #############################################################################
+############################################            Notizen          #############################################################################
 #####################################################################################################################################################
 #   # Below is the definition of your workflow.
 #   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
