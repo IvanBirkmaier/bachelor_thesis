@@ -39,7 +39,8 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build Base Image, tagged with CircleCI Build Number
           command: |
@@ -56,7 +57,8 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build Nx NestJS Image, tagged with CircleCI Build Number
           command: |
@@ -74,7 +76,8 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build Nx Angular Image, tagged with CircleCI Build Number
           command: |
@@ -86,21 +89,20 @@ jobs:
           command: |
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             docker push ivanbirkamier/nxangularjsfrontend:"$CIRCLE_BUILD_NUM"
-            docker push ivanbirkamier/nxangularjsfrontend:latest
-    
+            docker push ivanbirkamier/nxangularjsfrontend:latest   
 workflows:
   affected-services:
     jobs:
-      #- lint-test-build-affected-services
+      - lint-test-build-affected-services
       - nx_build_baseImage
-          # requires:
-          #   - lint-test-build-affected-services
-      #- nx_build_nestjsbackend
-          #requires:
-          #- lint-test-build-affected-services
-      - nx_build_nxangularfrontend:
+          requires:
+            - lint-test-build-affected-services
+      - nx_build_nestjsbackend
           requires:
             - nx_build_baseImage
+      - nx_build_nxangularfrontend:
+          requires:
+            	- nx_build_baseImage
 
 
 ###################################################################################################################################################
