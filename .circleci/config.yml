@@ -88,6 +88,12 @@ jobs:
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             docker push ivanbirkamier/nxangularjsfrontend:"$CIRCLE_BUILD_NUM"
             docker push ivanbirkamier/nxangularjsfrontend:latest   
+  deploy:
+    executor: docker-exe
+    working_directory: ~/project
+    steps:
+    
+
 workflows:
   affected-services:
     jobs:

@@ -24,7 +24,6 @@ services:
     networks:
       - corp
     restart: on-failure
-
   frontend:
     container_name: frontend
     build:
