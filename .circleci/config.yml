@@ -94,15 +94,15 @@ workflows:
   affected-services:
     jobs:
       - lint-test-build-affected-services
-      - nx_build_baseImage
-          requires:
-            - lint-test-build-affected-services
-      - nx_build_nestjsbackend
-          requires:
-            - nx_build_baseImage
+      - nx_build_baseImage:
+            requires:
+              - lint-test-build-affected-services
+      - nx_build_nestjsbackend:
+            requires:
+              - nx_build_baseImage
       - nx_build_nxangularfrontend:
-          requires:
-            	- nx_build_baseImage
+            requires:
+                - nx_build_baseImage
 
 
 ###################################################################################################################################################
