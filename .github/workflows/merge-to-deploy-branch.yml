@@ -14,20 +14,21 @@ env:
   DOCKER_USER: ${{ secrets.DOCKER_USER }}
  # DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 jobs:
-  # lint-test-build-hole-repository:
-  #   if: github.event.pull_request.merged == true
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - uses: nrwl/nx-set-shas@v3
-  #     - run: npm ci
-  #     - run: npx nx run-many --target=lint --all --parallel=3
-  #     - run: npx nx run-many --target=test --all --parallel=3 --ci --code-coverage
-  #     - run: npx nx run-many --target=build --all --parallel=3
+  lint-test-build-hole-repository:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v3
+      - run: npm ci
+      - run: npx nx run-many --target=lint --all --parallel=3
+      - run: npx nx run-many --target=test --all --parallel=3 --ci --code-coverage
+      - run: npx nx run-many --target=build --all --parallel=3
   building-pushing-base-image: 
     if: github.event.pull_request.merged == true
+    needs: lint-test-build-hole-repository 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -55,45 +56,28 @@ jobs:
       - name: Build and push NestJS-Backend-Image for all the Apps in Nx-Repository
         uses: docker/build-push-action@v2
         with:
-          context: .apps/backend
+          context: ./apps/backend
           push: true
           tags: ${{ secrets.DOCKER_USER }}/nxnestjsbackend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxnestjsbackend:latest
+      - name: Register and deploy Images to Heroku 
+        working-directory: backend
+        run: docker login --username=_ --password={{ secrets.HEROKU_API_KEY }} registry.heroku.com
+        run: |
+            heroku container:push web -a {{ secrets.STAG_B }}
+            heroku container:release web -a {{ sercrets.STAG_B }}  
       - name: Build and push AngularJS-Frontend-Image for all the Apps in Nx-Repository
         uses: docker/build-push-action@v2
         with:
-          context: .apps/frontend
+          context: ./apps/frontend
           push: true
           tags: ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:latest
-      # - name: Docker Login
-      #   run: |
-      #     docker login -u "${{ env.DOCKER_USER }}" -p "${{ env.DOCKER_PASSWORD }}"  
-      # - name: Build NX Base Image for all the Apps in Nx-Repository
-      #   run: |
-      #     docker login -u ${{ env.DOCKER_USER }} -p ${{ env.DOCKER_PASSWORD }}  docker.io
-      #     docker build -t ${{ env.BASE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
-      #     docker tag ${{ env.BASE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.BASE_IMAGE_NAME }}:latest
-      #     docker push ${{ env.BASE_IMAGE_NAME }}:latest
-      #     docker push ${{ env.BASE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-      #  - name: Build NX Base Image for all the Apps in Nx-Repository
-      #   run: |
-      #     docker login -u "${{ secrets.DOCKER_USER }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-      #     docker build -t ivanbirkamier/nxbasimages:"${{ env.IMAGE_TAG }}" .
-      #     docker tag ivanbirkamier/nxbasimages:"${{ env.IMAGE_TAG }}" ivanbirkamier/nxbasimages:latest
-      #     docker push ivanbirkamier/nxbasimages:latest
-      #     docker push ivanbirkamier/nxbasimages:"${{ env.IMAGE_TAG }}"
-      # - name: Build NestJS backend Image
-      #   run: |
-      #     docker build ./backend -t ${{ env.BACKEND_IMAGE_NAME }}:latest .
-      #     docker tag ${{ env.BACKEND_IMAGE_NAME }}:latest ${{ env.BACKEND_IMAGE_NAME }}:"${{ env.IMAGE_TAG }}" 
-      # - name: Build AngularJS frontend Image
-      #   run: |
-      #     docker build ./frontend -t ${{ env.FRONTEND_IMAGE_NAME }}:latest .
-      #     docker tag ${{ env.FRONTEND_IMAGE_NAME }}:latest ${{ env.FRONTEND_IMAGE_NAME }}:"${{ env.IMAGE_TAG }}"
-      # - name: Push Frontend and Backend Images to Docker Hub
-      #   run: |
-      #     docker push ${{ env.BACKEND_IMAGE_NAME }}:latest
-      #     docker push ${{ env.BACKEND_IMAGE_NAME }}:"${{ env.IMAGE_TAG }}"
-      #     docker push ${{ env.FRONTEND_IMAGE_NAME }}:latest
-      #     docker push ${{ env.FRONTEND_IMAGE_NAME }}:"${{ env.IMAGE_TAG }}"            
- 
- # deploy-to-heroku-staging:
+      - name: Register and deploy Images to Heroku 
+        working-directory: frontend
+        run: docker login --username=_ --password={{ secrets.HEROKU_API_KEY }} registry.heroku.com
+        run: |
+            heroku container:push web -a {{ secrets.STAG_F }}
+            heroku container:release web -a {{ sercrets.STAG_F }}  
+      
+      
+    
+     
