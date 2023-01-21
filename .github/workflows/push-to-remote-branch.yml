@@ -5,8 +5,8 @@ on:
     branches-ignore:
       - main
       - develop
-lint:
-  main:
+jobs:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
