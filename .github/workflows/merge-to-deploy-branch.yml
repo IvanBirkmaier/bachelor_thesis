@@ -76,7 +76,7 @@ jobs:
       - name: Register and deploy NestJS Images to Heroku 
         uses: gonuit/heroku-docker-deploy@v1.3.3 
         with:
-          e-mail: ${{ secrets.HEROKU_ACC }}
+          email: ${{ secrets.HEROKU_ACC }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.STAG_B }}
           dockerfile_directory: ./apps/backend
