@@ -1,11 +1,11 @@
 name: Push to remote branch
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: Linting, testing, buliding up all the affected services of your commits
 on:
   push:
     branches-ignore:
       - main
       - develop
-jobs:
+lint:
   main:
     runs-on: ubuntu-latest
     steps:
@@ -14,9 +14,22 @@ jobs:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v3
       - run: npm ci
-
-      # - run: npx nx workspace-lint
-      # - run: npx nx format:check
       - run: npx nx affected --target=lint --parallel=3
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v3
+      - run: npm ci
       - run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v3
+      - run: npm ci
       - run: npx nx affected --target=build --parallel=3
