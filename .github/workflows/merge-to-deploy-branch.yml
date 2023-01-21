@@ -67,7 +67,7 @@ jobs:
       - name: Register and deploy Images to Heroku 
         working-directory: apps/backend
         run: |
-            docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
+            docker login --username=_ --password= ${{ secrets.HEROKU_API_KEY }} registry.heroku.com
             heroku container:push web -a ${{ secrets.STAG_B }}
             heroku container:release web -a ${{ sercrets.STAG_B }}  
       - name: Build and push AngularJS-Frontend-Image for all the Apps in Nx-Repository
