@@ -9,68 +9,68 @@ on:
 env:
   IMAGE_TAG: ${{ github.run_number }}
 jobs:
-  # lint-test-build-repository:
-  #   if: github.event.pull_request.merged == true
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - uses: nrwl/nx-set-shas@v3
-  #     - run: npm ci
-  #     - name: Running lint for the hole Repository
-  #       run: npx nx run-many --target=lint --all --parallel=3
-  #     - name: Running all tests of the hole Repository
-  #       run: npx nx run-many --target=test --all --parallel=3 --ci --code-coverage
-  #     - name: Build the hole Repository
-  #       run: npx nx run-many --target=build --all --parallel=3
-  # building-pushing-base-image: 
-  #   if: github.event.pull_request.merged == true
-  #   needs: lint-test-build-repository 
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Login to Docker Hub
-  #       uses: docker/login-action@v2
-  #       with:
-  #         username: ${{ secrets.DOCKER_USER }}
-  #         password: ${{ secrets.DOCKER_TOKEN }}
-  #     - name: Building and pushing the NX-Base-Image for all the Apps in Nx-Repository to Docker Hub
-  #       uses: docker/build-push-action@v2
-  #       with:
-  #         context: .
-  #         push: true
-  #         tags: ${{ secrets.DOCKER_USER }}/nxbasimages:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxbasimages:latest
-  # building-pushing-app-images: 
-  #   if: github.event.pull_request.merged == true
-  #   needs: building-pushing-base-image
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Login to Docker Hub
-  #       uses: docker/login-action@v2
-  #       with:
-  #         username: ${{ secrets.DOCKER_USER }}
-  #         password: ${{ secrets.DOCKER_TOKEN }}
-  #     - name: Building and pushing NestJS-Backend-Image to Docker Hub
-  #       uses: docker/build-push-action@v2
-  #       with:
-  #         context: ./apps/backend
-  #         push: true
-  #         tags: ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:latest
-  #     - name: Building and pushing AngularJS-Frontend-Image to Docker Hub
-  #       uses: docker/build-push-action@v2
-  #       with:
-  #         context: ./apps/frontend
-  #         push: true
-  #         tags: ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:latest
+  lint-test-build-repository:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v3
+      - run: npm ci
+      - name: Running lint for the hole Repository
+        run: npx nx run-many --target=lint --all --parallel=3
+      - name: Running all tests of the hole Repository
+        run: npx nx run-many --target=test --all --parallel=3 --ci --code-coverage
+      - name: Build the hole Repository
+        run: npx nx run-many --target=build --all --parallel=3
+  building-pushing-base-image: 
+    if: github.event.pull_request.merged == true
+    needs: lint-test-build-repository 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Building and pushing the NX-Base-Image for all the Apps in Nx-Repository to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USER }}/nxbasimages:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxbasimages:latest
+  building-pushing-app-images: 
+    if: github.event.pull_request.merged == true
+    needs: building-pushing-base-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Building and pushing NestJS-Backend-Image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: ./apps/backend
+          push: true
+          tags: ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:latest
+      - name: Building and pushing AngularJS-Frontend-Image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: ./apps/frontend
+          push: true
+          tags: ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:latest
   building-deploying-to-Heroku: 
     if: github.event.pull_request.merged == true
-  #  needs:  building-pushing-app-images 
+    needs:  building-pushing-app-images 
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2   
@@ -85,7 +85,7 @@ jobs:
       - name: Register and deploy AngularJS Images to Heroku 
         uses: gonuit/heroku-docker-deploy@v1.3.3 
         with:
-          e-mail: ${{ secrets.HEROKU_ACC }}
+          email: ${{ secrets.HEROKU_ACC }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.STAG_F }}
           dockerfile_directory: ./apps/frontend
