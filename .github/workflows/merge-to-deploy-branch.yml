@@ -57,7 +57,7 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ${{ secrets.DOCKER_USER }}//nxnestjsbackend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}//nxnestjsbackend:latest
+          tags: ${{ secrets.DOCKER_USER }}/nxnestjsbackend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxnestjsbackend:latest
       - name: Build and push AngularJS-Frontend-Image for all the Apps in Nx-Repository
         uses: docker/build-push-action@v2
         with:
