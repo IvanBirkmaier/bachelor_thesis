@@ -78,7 +78,6 @@ jobs:
         with:
           e-mail: ${{ secrets.HEROKU_ACC }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_app_name: ${{ secrets.STAG_B }}
           dockerfile_directory: ./apps/backend
           process_type: web
@@ -87,7 +86,6 @@ jobs:
         with:
           e-mail: ${{ secrets.HEROKU_ACC }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_app_name: ${{ secrets.STAG_F }}
           dockerfile_directory: ./apps/frontend
           process_type: web
