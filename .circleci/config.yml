@@ -21,7 +21,28 @@ executors:
     docker:
       - image: docker:17.05.0-ce-git
 jobs:
-  lint-test-build-affected-services:
+  lint-all-services: 
+    executor: node-exe 
+    steps:
+      - checkout
+      - run: npm ci
+      - nx/set-shas
+      - run: npx nx run-many --target=lint --all --parallel=3
+  test-all-services: 
+    executor: node-exe 
+    steps:
+      - checkout
+      - run: npm ci
+      - nx/set-shas
+      - run: npx nx run-many --target=test --all --parallel=3
+  build-all-services:
+    executor: node-exe 
+    steps:
+      - checkout
+      - run: npm ci
+      - nx/set-shas
+      - run: npx nx nx run-many --target=lint --all --parallel=3
+  lint-affected-services: 
     executor: node-exe 
     steps:
       - checkout
@@ -30,7 +51,23 @@ jobs:
       # - run: npx nx workspace-lint
       # - run: npx nx format:check
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint --parallel=3
+  test-affected-services: 
+    executor: node-exe 
+    steps:
+      - checkout
+      - run: npm ci
+      - nx/set-shas
+      # - run: npx nx workspace-lint
+      # - run: npx nx format:check
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3 --ci --code-coverage
+  build-affected-services:
+    executor: node-exe 
+    steps:
+      - checkout
+      - run: npm ci
+      - nx/set-shas
+      # - run: npx nx workspace-lint
+      # - run: npx nx format:check
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=build --parallel=3
   nx_build_baseImage:
     executor: docker-exe
@@ -88,19 +125,38 @@ jobs:
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             docker push ivanbirkamier/nxangularjsfrontend:"$CIRCLE_BUILD_NUM"
             docker push ivanbirkamier/nxangularjsfrontend:latest   
-  # deploy:
-  #   executor: docker-exe
-  #   working_directory: ~/project
-  #   steps:
-    
+
 
 workflows:
-  affected-services:
+  push-to-remote-branch:
     jobs:
-      - lint-test-build-affected-services
+      - lint-affected-services
+      - test-affected-services:
+          requires:
+            - lint-affected-services
+      - build-affected-services:
+          requires:
+            - lint-affected-services
+            - test-affected-services
+  merge-to-deploy:
+    triggers:
+      - event:
+          type: pull_request
+          action: close
+          branches:
+            include:
+              - develop
+    jobs:
+      - lint-all-services
+      - test-all-services:
+          requires:
+            - lint-all-services  
+      - build-all-services:
+            requires:
+            - test-all-services  
       - nx_build_baseImage:
             requires:
-              - lint-test-build-affected-services
+              - build-all-services 
       - nx_build_nestjsbackend:
             requires:
               - nx_build_baseImage
