@@ -61,8 +61,8 @@ jobs:
           tags: ${{ secrets.DOCKER_USER }}/nxnestjsbackend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxnestjsbackend:latest
       - name: Register and deploy Images to Heroku 
         working-directory: backend
-        run: docker login --username=_ --password={{ secrets.HEROKU_API_KEY }} registry.heroku.com
         run: |
+            docker login --username=_ --password={{ secrets.HEROKU_API_KEY }} registry.heroku.com
             heroku container:push web -a {{ secrets.STAG_B }}
             heroku container:release web -a {{ sercrets.STAG_B }}  
       - name: Build and push AngularJS-Frontend-Image for all the Apps in Nx-Repository
@@ -73,8 +73,8 @@ jobs:
           tags: ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:latest
       - name: Register and deploy Images to Heroku 
         working-directory: frontend
-        run: docker login --username=_ --password={{ secrets.HEROKU_API_KEY }} registry.heroku.com
         run: |
+            docker login --username=_ --password={{ secrets.HEROKU_API_KEY }} registry.heroku.com
             heroku container:push web -a {{ secrets.STAG_F }}
             heroku container:release web -a {{ sercrets.STAG_F }}  
       
