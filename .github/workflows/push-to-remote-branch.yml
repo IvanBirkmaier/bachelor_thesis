@@ -6,7 +6,7 @@ on:
       - main
       - develop
 jobs:
-  lint:
+  lint-test-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,23 +15,37 @@ jobs:
       - uses: nrwl/nx-set-shas@v3
       - run: npm ci
       - run: npx nx affected --target=lint --parallel=3
-  test:
-    needs: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v3
-      - run: npm ci
       - run: npx nx affected --target=test --parallel=3 --ci --code-coverage
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v3
-      - run: npm ci
       - run: npx nx affected --target=build --parallel=3
+#########################################################################################################################################################
+###########################################   Beispiel warum das länger dauern kann #####################################################################
+#########################################################################################################################################################
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: nrwl/nx-set-shas@v3
+  #     - run: npm ci
+  #     - run: npx nx affected --target=lint --parallel=3
+  # test:
+  #   needs: lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: nrwl/nx-set-shas@v3
+  #     - run: npm ci
+  #     - run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+  # build:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: nrwl/nx-set-shas@v3
+  #     - run: npm ci
+  #     - run: npx nx affected --target=build --parallel=3
