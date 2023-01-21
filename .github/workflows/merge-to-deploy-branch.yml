@@ -70,7 +70,7 @@ jobs:
   #         tags: ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:latest
   building-deploying-to-Heroku: 
     if: github.event.pull_request.merged == true
-    needs:  building-pushing-app-images 
+#    needs:  building-pushing-app-images 
     runs-on: ubuntu-latest
     steps:    
       - name: Register and deploy NestJS Images to Heroku 
