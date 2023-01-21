@@ -40,7 +40,7 @@ jobs:
           docker login -u "${{ secrets.DOCKER_USER }}" -p "${{ secrets.DOCKER_PASSWORD }}"
           docker push ivanbirkamier/nxbasimages:latest
           docker push ivanbirkamier/nxbasimages:"${{ env.IMAGE_TAG }}"
-
+##############################################
 # building-docker-images: 
 #     if: github.event.pull_request.merged == true
 #     #needs: lint-test-build-hole-repository
