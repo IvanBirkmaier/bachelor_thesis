@@ -26,7 +26,7 @@ jobs:
         run: npx nx run-many --target=build --all --parallel=3
   building-pushing-base-image: 
     if: github.event.pull_request.merged == true
-    needs: lint-test-build-hole-repository 
+    needs: lint-test-build-repository 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
