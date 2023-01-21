@@ -1,17 +1,22 @@
 version: "3.8"
-
 networks:
   corp:
     driver: bridge
-
 services:
+  base:
+    container_name: nx_local_baseImage
+    build:
+      context: ./
+      cache_from:
+        - nx_local_baseImage:latest
+      dockerfile: Dockerfile.local
   backend:
     container_name: backend
     build:
       context: ./
       cache_from:
-        - ivanbirkamier/nxbasimages:latest
-      dockerfile: ./apps/backend/Dockerfile
+        - nx_local_baseImage:latest
+      dockerfile: ./apps/backend/Dockerfile.local
       args:
         NODE_ENV: "development"
         BUILD_FLAG: ""
@@ -30,7 +35,7 @@ services:
       context: ./
       cache_from:
         - nginx:1.19.2
-      dockerfile: ./apps/frontend/Dockerfile
+      dockerfile: ./apps/frontend/Dockerfile.local
       args:
         NODE_ENV: "development"
         BUILD_FLAG: ""
