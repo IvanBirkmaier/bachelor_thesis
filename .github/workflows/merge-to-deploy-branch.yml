@@ -70,16 +70,17 @@ jobs:
   #         tags: ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxangularjsfrontend:latest
   building-deploying-to-Heroku: 
     if: github.event.pull_request.merged == true
-#    needs:  building-pushing-app-images 
+  #  needs:  building-pushing-app-images 
     runs-on: ubuntu-latest
-    steps:    
+    steps: 
+      - uses: actions/checkout@v2   
       - name: Register and deploy NestJS Images to Heroku 
         uses: gonuit/heroku-docker-deploy@v1.3.3 
         with:
           email: ${{ secrets.HEROKU_ACC }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.STAG_B }}
-          dockerfile_directory: backend
+          dockerfile_directory: ./apps/backend
           process_type: web
       - name: Register and deploy AngularJS Images to Heroku 
         uses: gonuit/heroku-docker-deploy@v1.3.3 
@@ -87,5 +88,5 @@ jobs:
           e-mail: ${{ secrets.HEROKU_ACC }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.STAG_F }}
-          dockerfile_directory: frontend
+          dockerfile_directory: ./apps/frontend
           process_type: web
