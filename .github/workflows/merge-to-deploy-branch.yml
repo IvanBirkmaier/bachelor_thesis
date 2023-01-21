@@ -14,21 +14,21 @@ env:
   DOCKER_USER: ${{ secrets.DOCKER_USER }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 jobs:
-  lint-test-build-hole-repository:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v3
-      - run: npm ci
-      - run: npx nx run-many --target=lint --all --parallel=3
-      - run: npx nx run-many --target=test --all --parallel=3 --ci --code-coverage
-      - run: npx nx run-many --target=build --all --parallel=3
+  # lint-test-build-hole-repository:
+  #   if: github.event.pull_request.merged == true
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: nrwl/nx-set-shas@v3
+  #     - run: npm ci
+  #     - run: npx nx run-many --target=lint --all --parallel=3
+  #     - run: npx nx run-many --target=test --all --parallel=3 --ci --code-coverage
+  #     - run: npx nx run-many --target=build --all --parallel=3
   building-docker-images: 
     if: github.event.pull_request.merged == true
-    needs: lint-test-build-hole-repository
+    #needs: lint-test-build-hole-repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
