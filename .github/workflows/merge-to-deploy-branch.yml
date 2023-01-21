@@ -47,7 +47,7 @@ jobs:
 #           tags: ${{ secrets.DOCKER_USER }}/nxbasimages:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USER }}/nxbasimages:latest
   building-pushing-app-images: 
     if: github.event.pull_request.merged == true
-    needs: building-pushing-base-image
+#    needs: building-pushing-base-image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
