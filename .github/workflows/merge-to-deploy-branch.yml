@@ -45,9 +45,7 @@ jobs:
           push: true
           tag: ivanbirkamier/nxbasimages:${{ env.IMAGE_TAG }}, ivanbirkamier/nxbasimages:latest
 
-      
-      
-      
+###########################
       
       
       # - name: Build NX Base Image for all the Apps in Nx-Repository
