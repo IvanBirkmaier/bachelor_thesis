@@ -35,9 +35,9 @@ jobs:
           fetch-depth: 0
       - name: Build NX Base Image for all the Apps in Nx-Repository
         run: |
-          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ivanbirkamier/nxbasimages:"${{ env.IMAGE_TAG }}" .
           docker tag ivanbirkamier/nxbasimages:"${{ env.IMAGE_TAG }}" ivanbirkamier/nxbasimages:latest
+          docker login -u "${{ secrets.DOCKER_USER }}" -p "${{ secrets.DOCKER_PASSWORD }}"
           docker push ivanbirkamier/nxbasimages:latest
           docker push ivanbirkamier/nxbasimages:"${{ env.IMAGE_TAG }}"
 
