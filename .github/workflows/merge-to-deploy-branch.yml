@@ -39,7 +39,7 @@ jobs:
       #     docker login -u "${{ env.DOCKER_USER }}" -p "${{ env.DOCKER_PASSWORD }}"  
       - name: Build NX Base Image for all the Apps in Nx-Repository
         run: |
-          docker login -u "${{ env.DOCKER_USER }}" -p "${{ env.DOCKER_PASSWORD }}"  
+          docker login -u "${{ env.DOCKER_USER }}" -p "${{ env.DOCKER_PASSWORD }}"  docker.io
           docker build -t ${{ env.BASE_IMAGE_NAME }}:"${{ env.IMAGE_TAG }}" .
           docker tag ${{ env.BASE_IMAGE_NAME }}:"${{ env.IMAGE_TAG }}" ${{ env.BASE_IMAGE_NAME }}:latest
           docker push ${{ env.BASE_IMAGE_NAME }}:latest
