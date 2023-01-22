@@ -52,5 +52,6 @@ jobs:
             }
           ]
         }' \
+          -H "Authorization: ${{ secrets.HEROKU_API_KEY }}" \ 
           -H "Content-Type: application/json" \
           -H "Accept: application/vnd.heroku+json; version=3"
