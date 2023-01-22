@@ -1,4 +1,4 @@
-FROM ivanbirkamier/nxbasimages:latest AS builder
+FROM nx_local_baseImage:latest AS builder
 
 ARG NODE_ENV
 ARG BUILD_FLAG

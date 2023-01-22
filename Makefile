@@ -22,3 +22,5 @@ stopC:
 .PHONY: deleteI
 deleteI:
 	docker rmi -f $(docker images -aq)
+
+#### docker exec -it frontend sh
