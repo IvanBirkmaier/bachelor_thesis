@@ -36,7 +36,7 @@ jobs:
       run: |
         curl -X POST https://api.heroku.com/pipelines-promotions \
         -H "Content-Type: application/json" \
-        -H "Authorization: Bearer ${{ secrets.HEROKU_API_KEY }}" \
+        -H "Authorization: Bearer ${{ secrets.HEROKU_TOKEN }}" \
           -d '{
         "pipeline": {
           "id": "${{ secrets.PIP_B_ID }}"
