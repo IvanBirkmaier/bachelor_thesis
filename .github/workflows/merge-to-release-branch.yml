@@ -34,21 +34,9 @@ jobs:
           -H "Accept: application/vnd.heroku+json; version=3"
     - name: REST API for deploying AngularJS Frontend to production enviroment
       run: |
-        curl -v -H "Authorization: ${{ secrets.HEROKU_API_KEY }}, Content-Type: application/json, Accept: application/vnd.heroku+json; version=3" \  -n -X POST https://api.heroku.com/pipeline-promotions \
-        -d '{
-        "pipeline": {
-          "id": "${{ secrets.PIP_F_ID }}"
-        },
-        "source": {
-          "app": {
-            "id": "${{ secrets.STAG_F_ID }}"
-           }
-        },
-         "targets": [
-            {
-               "app": {
-                  "id": "${{ secrets.PROB_F_ID }}"
-                }
-            }
-          ]
-        }' 
+        curl -X POST https://api.heroku.com/pipelines/${{ secrets.PIP_F_ID }}/promotions \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer ${{ secrets.HEROKU_API_KEY }}" \
+        -d '{ "source": "staging", "target": "production" }' \
+        -H "Accept: application/vnd.heroku+json; version=3"
+
