@@ -17,7 +17,7 @@ jobs:
         with:
           email: ${{ secrets.HEROKU_ACC }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.STAG_B }}
+          heroku_app_name: ${{ secrets.PROD_B }}
           dockerfile_directory: ./apps/backend
           process_type: web
       - name: Register and deploy AngularJS Images to Heroku 
@@ -25,7 +25,7 @@ jobs:
         with:
           email: ${{ secrets.HEROKU_ACC }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.STAG_F }}
+          heroku_app_name: ${{ secrets.PROD_F }}
           dockerfile_directory: ./apps/frontend
           process_type: web
 ###############################################################################################################################################################
