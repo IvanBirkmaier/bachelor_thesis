@@ -31,10 +31,11 @@ jobs:
           ]
         }' \
           -H "Content-Type: application/json" \
-          -H "Accept: application/vnd.heroku+json; version=3"
+          -H "Accept: application/vnd.heroku+json; version=3" \
+          -H "Authorization: Bearer ${{ secrets.HEROKU_TOKEN }}" 
     - name: REST API for deploying AngularJS Frontend to production enviroment
       run: |
-        curl -X POST 
+        curl -X POST https://api.heroku.com/pipelines-promotions 
         -H "Accept: application/vnd.heroku+json; version=3" \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer ${{ secrets.HEROKU_TOKEN }}" \
@@ -54,7 +55,7 @@ jobs:
                 }
             }
           ]
-        }' \ 
-        https://api.heroku.com/pipelines-promotions 
+        }' 
+
         
 
