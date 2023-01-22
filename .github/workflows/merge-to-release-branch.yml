@@ -8,54 +8,79 @@ on:
       - main
 jobs:
   deploy-from-staging-toproduction:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    steps:
-    - name: REST API for deploying NestJS Backend to production enviroment
-      run: |
-        curl -n -X POST https://api.heroku.com/pipeline-promotions \
-        -d '{
-        "pipeline": {
-          "id": "${{ secrets.PIP_B_ID }}"
-        },
-        "source": {
-          "app": {
-            "id": "${{ secrets.STAG_B_ID }}"
-           }
-        },
-         "targets": [
-            {
-               "app": {
-                  "id": "${{ secrets.PROB_B_ID }}"
-                }
-            }
-          ]
-        }' \
-          -H "Content-Type: application/json" \
-          -H "Accept: application/vnd.heroku+json; version=3" \
-          -H "Authorization: Bearer ${{ secrets.HEROKU_TOKEN }}" 
-    - name: REST API for deploying AngularJS Frontend to production enviroment
-      run: |
-        curl -X POST https://api.heroku.com/pipelines-promotions 
-        -H "Accept: application/vnd.heroku+json; version=3" \
-        -H "Content-Type: application/json" \
-        -H "Authorization: Bearer ${{ secrets.HEROKU_TOKEN }}" \
-          -d '{
-        "pipeline": {
-          "id": "${{ secrets.PIP_B_ID }}"
-        },
-        "source": {
-          "app": {
-            "id": "${{ secrets.STAG_B_ID }}"
-           }
-        },
-         "targets": [
-            {
-               "app": {
-                  "id": "${{ secrets.PROB_B_ID }}"
-                }
-            }
-          ]
-        }' 
+    steps: 
+      - uses: actions/checkout@v2   
+      - name: Register and deploy NestJS Images to Heroku 
+        uses: gonuit/heroku-docker-deploy@v1.3.3 
+        with:
+          email: ${{ secrets.HEROKU_ACC }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.STAG_B }}
+          dockerfile_directory: ./apps/backend
+          process_type: web
+      - name: Register and deploy AngularJS Images to Heroku 
+        uses: gonuit/heroku-docker-deploy@v1.3.3 
+        with:
+          email: ${{ secrets.HEROKU_ACC }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.STAG_F }}
+          dockerfile_directory: ./apps/frontend
+          process_type: web
+###############################################################################################################################################################
+#################################### Pipeline Promotion ist bei Dockern leider nicht unterstützt ##########################################################
+###########################################################################################################################################################
+
+  # deploy-from-staging-toproduction:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: REST API for deploying NestJS Backend to production enviroment
+  #     run: |
+  #       curl -X POST https://api.heroku.com/pipelines-promotions 
+  #       -H "Accept: application/vnd.heroku+json; version=3" \
+  #       -H "Content-Type: application/json" \
+  #       -H "Authorization: Bearer ${{ secrets.HEROKU_TOKEN }}" \
+  #       -d '{
+  #       "pipeline": {
+  #         "id": "${{ secrets.PIP_B_ID }}"
+  #       },
+  #       "source": {
+  #         "app": {
+  #           "id": "${{ secrets.STAG_B_ID }}"
+  #          }
+  #       },
+  #        "targets": [
+  #           {
+  #              "app": {
+  #                 "id": "${{ secrets.PROB_B_ID }}"
+  #               }
+  #           }
+  #         ]
+  #       }' 
+  #   - name: REST API for deploying AngularJS Frontend to production enviroment
+  #     run: |
+  #       curl -X POST https://api.heroku.com/pipelines-promotions 
+  #       -H "Accept: application/vnd.heroku+json; version=3" \
+  #       -H "Content-Type: application/json" \
+  #       -H "Authorization: Bearer ${{ secrets.HEROKU_TOKEN }}" \
+  #         -d '{
+  #       "pipeline": {
+  #         "id": "${{ secrets.PIP_B_ID }}"
+  #       },
+  #       "source": {
+  #         "app": {
+  #           "id": "${{ secrets.STAG_B_ID }}"
+  #          }
+  #       },
+  #        "targets": [
+  #           {
+  #              "app": {
+  #                 "id": "${{ secrets.PROB_B_ID }}"
+  #               }
+  #           }
+  #         ]
+  #       }' 
 
         
 
