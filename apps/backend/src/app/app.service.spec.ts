@@ -15,7 +15,7 @@ describe('AppService', () => {
 
   describe('getData', () => {
     it('should return "NestJS Backend"', () => {
-      expect(service.getData()).toEqual({ message: 'NestJS Backend' });
+      expect(service.getData()).toEqual({ message: 'NestJS Bakend' });
     });
   });
 });
