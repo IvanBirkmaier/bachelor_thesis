@@ -4,18 +4,16 @@ networks:
     driver: bridge
 services:
   base:
-    container_name: nx_local_baseImage
+    container_name: base
     build:
       context: ./
-      cache_from:
-        - nx_local_baseImage:latest
       dockerfile: Dockerfile.local
   backend:
     container_name: backend
     build:
       context: ./
       cache_from:
-        - nx_local_baseImage:latest
+        - praxisteil_bachelor_arbeit_base:latest
       dockerfile: ./apps/backend/Dockerfile.local
       args:
         NODE_ENV: "development"
