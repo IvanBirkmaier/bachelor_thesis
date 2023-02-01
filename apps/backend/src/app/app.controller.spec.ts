@@ -14,10 +14,10 @@ describe('AppController', () => {
   });
 
   describe('getData', () => {
-    it('should return "PASS TEST"', () => {
+    it('should return "NestJS Backend"', () => {
       const appController = app.get<AppController>(AppController);
       expect(appController.getData()).toEqual({
-        message: 'PASS TEST',
+        message: 'NestJS Backend',
       });
     });
   });
